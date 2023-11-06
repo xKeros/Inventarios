@@ -1,6 +1,6 @@
 import { GraphQLSchema, GraphQLObjectType } from "graphql";
 import { GREETING } from "./Queries/Greeting";
-import { CREAR_PRODUCTO } from "./Mutations/Productos";
+import { CREAR_PRODUCTO, ELIMINAR_PRODUCTO, UPDATE_USER } from "./Mutations/Productos";
 import {todosProductos, UN_PRODUCTO } from "./Queries/Productos";
 
 
@@ -16,7 +16,9 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
-    crearProducto: CREAR_PRODUCTO
+    crearProducto: CREAR_PRODUCTO,
+    eliminarProducto: ELIMINAR_PRODUCTO,
+    actualizar: UPDATE_USER
   }
 })
 
