@@ -41,7 +41,7 @@ export const ELIMINAR_PRODUCTO = {
 };
 
 export const UPDATE_USER = {
-  type: ProductType,
+  type: GraphQLBoolean,
   args: {
     id: { type: GraphQLID },
     Barcode: { type: GraphQLString },
@@ -58,10 +58,9 @@ export const UPDATE_USER = {
     });
     console.log(resultado);
     if (resultado.affected === 1) {
-      return "Se actualizado"
+      return true
     } else {
-      return "No se actualizó"
+      return false
     }
-    return {...args};
   }
 };
