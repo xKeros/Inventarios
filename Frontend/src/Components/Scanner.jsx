@@ -1,15 +1,15 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Webcam from "react-webcam";
-import Quagga from "quagga";
+import Quagga from "@ericblade/quagga2";
 
-const Scanner = () => {
+export const Scanner = () => {
   const webcamRef = useRef(null);
+  const [facingMode, setFacingMode] = useState("environment");
 
   useEffect(() => {
     const onDetected = result => {
       console.log(result.codeResult.code);
-      // Aquí puedes agregar la lógica adicional que desees con el código de barras detectado.
+      Quagga.stop();
     };
 
     Quagga.init(
@@ -18,9 +18,12 @@ const Scanner = () => {
           name: "Live",
           type: "LiveStream",
           target: webcamRef.current.video,
+          constraints: {
+            facingMode: facingMode,
+          },
         },
         decoder: {
-          readers: ["ean_reader"], // Puedes ajustar esto según tus necesidades de formato de código de barras
+          readers: ["ean_reader"],
         },
       },
       err => {
@@ -38,7 +41,13 @@ const Scanner = () => {
       Quagga.offDetected(onDetected);
       Quagga.stop();
     };
-  }, []);
+  }, [facingMode]);
+
+  const switchCamera = () => {
+    setFacingMode(prevMode =>
+      prevMode === "environment" ? "user" : "environment"
+    );
+  };
 
   return (
     <div>
@@ -48,6 +57,7 @@ const Scanner = () => {
         mirrored={true}
         screenshotFormat="image/jpeg"
       />
+      <button onClick={switchCamera}>Switch Camera</button>
     </div>
   );
 };

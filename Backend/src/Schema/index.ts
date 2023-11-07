@@ -1,7 +1,7 @@
 import { GraphQLSchema, GraphQLObjectType } from "graphql";
 import { GREETING } from "./Queries/Greeting";
 import { CREAR_PRODUCTO, ELIMINAR_PRODUCTO, UPDATE_USER } from "./Mutations/Productos";
-import {todosProductos, UN_PRODUCTO } from "./Queries/Productos";
+import {todosProductos, BUSCAR_PRODUCTO_POR_BARCODE } from "./Queries/Productos";
 
 
 const RootQuery = new GraphQLObjectType({
@@ -9,7 +9,7 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     greeting: GREETING,
     todosProductos : todosProductos,
-    UN_PRODUCTO: UN_PRODUCTO
+    UN_PRODUCTO: BUSCAR_PRODUCTO_POR_BARCODE
   },
 });
 

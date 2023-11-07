@@ -11,12 +11,13 @@ export const todosProductos = {
   },
 };
 
-export const UN_PRODUCTO = {
-  type: ProductType,
+export const BUSCAR_PRODUCTO_POR_BARCODE = {
+  type: GraphQLList(ProductType),
   args: {
-    id: {type: GraphQLID}
+    barcode: { type: GraphQLString } // Asegúrate de que el tipo de datos sea el correcto para el código de barras
   },
-  async resolve(_:any, args: any) {
-    return await Productos.findOne(args.id)
+  async resolve(_: any, args: any) {
+    const { barcode } = args;
+    return await Productos.find({ where: { Barcode: barcode } });
   }
 }
