@@ -1,65 +1,93 @@
-import React, { useRef, useEffect, useState } from "react";
-import Webcam from "react-webcam";
-import Quagga from "@ericblade/quagga2";
+import { useEffect, useState, useRef } from 'react';
+import { Html5QrcodeScanner } from 'html5-qrcode';
 
-export const Scanner = () => {
-  const webcamRef = useRef(null);
-  const [facingMode, setFacingMode] = useState("environment");
+function Scanner() {
+  const [scanResult, setScanResult] = useState(null);
+  const [manualSerialNumber, setManualSerialNumber] = useState('');
+  const html5QrcodeRef = useRef(null);
+  const [cameraId, setCameraId] = useState('environment');
 
   useEffect(() => {
-    const onDetected = result => {
-      console.log(result.codeResult.code);
-      Quagga.stop();
-    };
+    let scanner;
 
-    Quagga.init(
-      {
-        inputStream: {
-          name: "Live",
-          type: "LiveStream",
-          target: webcamRef.current.video,
-          constraints: {
-            facingMode: facingMode,
-          },
-        },
-        decoder: {
-          readers: ["ean_reader"],
-        },
-      },
-      err => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        Quagga.start();
+    async function initializeScanner() {
+      try {
+        scanner = new Html5QrcodeScanner('reader', {
+          fps: 5,
+        });
+
+        scanner.render(success, error);
+      } catch (error) {
+        console.error('Error al escanear el producto', error);
       }
-    );
+    }
 
-    Quagga.onDetected(onDetected);
+    function success(result) {
+      setScanResult(result);
+    }
+
+    function error(err) {
+      console.warn(err);
+    }
+
+    initializeScanner();
+
+    html5QrcodeRef.current = scanner;
 
     return () => {
-      Quagga.offDetected(onDetected);
-      Quagga.stop();
+      if (scanner) {
+        scanner.clear();
+      }
     };
-  }, [facingMode]);
+  }, []);
 
-  const switchCamera = () => {
-    setFacingMode(prevMode =>
-      prevMode === "environment" ? "user" : "environment"
-    );
-  };
+  function handleManualSerialNumberChange(event) {
+    setManualSerialNumber(event.target.value);
+  }
+
+  function switchCamera() {
+    if (cameraId === 'environment') {
+      html5QrcodeRef.current.clear();
+      html5QrcodeRef.current.start('user', { facingMode: 'user' }, success, error);
+      setCameraId('user');
+    } else {
+      html5QrcodeRef.current.clear();
+      html5QrcodeRef.current.start('environment', null, success, error);
+      setCameraId('environment');
+    }
+  }
 
   return (
-    <div>
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        mirrored={true}
-        screenshotFormat="image/jpeg"
-      />
-      <button onClick={switchCamera}>Switch Camera</button>
+    <div className="App">
+      <h1>QR Scanning Code</h1>
+      <button onClick={switchCamera}>
+        Elegir Camara ({cameraId === 'environment' ? 'Camara Frontal' : 'Camara Trasera'})
+      </button>
+      {scanResult ? (
+        <div>
+          <p>
+            Success: <a href={scanResult}>{scanResult}</a>
+          </p>
+          <p>Serial Number: {scanResult.slice(-16)}</p>
+        </div>
+      ) : (
+        <div>
+          <div id="reader"></div>
+          <p className="center-text">Or enter the serial number manually:</p>
+          <div className="center-input">
+            <input
+              type="text"
+              value={manualSerialNumber}
+              onChange={handleManualSerialNumberChange}
+            />
+            {manualSerialNumber && (
+              <p>Serial Number: {manualSerialNumber.slice(-16)}</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default Scanner;
