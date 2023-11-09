@@ -4,8 +4,7 @@ import Layout from "./Pages/Layout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ApolloClient, InMemoryCache, ApolloProvider,  } from '@apollo/client';
 import { ListaInventarios } from "./Pages/ListaInventarios";
-import { Crear_Producto } from "./Components/Crear_Producto";
-import Scanner from "./Components/Scanner";
+import { Crear_Producto } from "./Components/Crear_Producto"
 
 const conexion = new ApolloClient({
   uri: 'http://localhost:3000/graphql',
@@ -18,7 +17,7 @@ const App = () => {
       <ApolloProvider client={conexion}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Scanner />}/>
+            <Route path="/" element={<Layout />}/>
             <Route path="/lista" element={<ListaInventarios />} />
             <Route path="/crear" element={<Crear_Producto />} />
           </Routes>

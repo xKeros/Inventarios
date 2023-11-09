@@ -1,30 +1,41 @@
-.miComponente {
-  background: url("ruta/a/tu/imagen.jpg"); /* Reemplaza esto con la ruta a tu imagen de fondo */
-  background-size: cover;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.background {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info {
+  position: absolute;
+  top: 30%;
+  left: 75%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
   color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Esto hará que el componente ocupe toda la altura de la pantalla */
   text-align: center;
 }
-
-.miComponente h1 {
-  font-size: 2em;
-  margin-bottom: 0.5em;
+h1{
+  font-size: 100px;
+  color: darkblue;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
-.miComponente p {
-  font-size: 1.5em;
-  margin-bottom: 2em;
-}
-
-.miComponente button {
-  background: white;
-  color: black;
-  border: none;
-  padding: 1em 2em;
-  margin: 0.5em;
-  cursor: pointer;
-}
