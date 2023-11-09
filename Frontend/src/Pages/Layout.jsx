@@ -19,7 +19,7 @@ const Layout = () => {
           </div>
           <div>
             <a href="/crear"><button type="button">Escanear Productos</button></a>
-            <a href="/lista"><button type="button">Ver Inventarios</button></a>
+            <a href="/lista"><button type="button">Ver inventarios</button></a>
           </div>
         </div>
       </div>
